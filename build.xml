@@ -1,0 +1,62 @@
+<project name="Sample usage of Salesforce Ant tasks" default="test" basedir="." xmlns:sf="antlib:com.salesforce">
+
+    <property file="build.properties"/>
+    <property environment="env"/>
+
+    <!-- Setting default value for username, password and session id properties to empty string 
+         so unset values are treated as empty. Without this, ant expressions such as ${sf.username}
+         will be treated literally.
+    -->
+    <condition property="sf.username" value=""> <not> <isset property="sf.username"/> </not> </condition>
+    <condition property="sf.password" value=""> <not> <isset property="sf.password"/> </not> </condition>
+    <condition property="sf.sessionId" value=""> <not> <isset property="sf.sessionId"/> </not> </condition>
+
+    <taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce">
+        <classpath>
+            <pathelement location="../ant-salesforce.jar" />        	
+        </classpath>
+    </taskdef>
+	 
+    <!-- Date -->
+    <tstamp>
+      <format property="TODAY_DATE" pattern="dd-MM-yyyy" locale="en,UK"/>
+    </tstamp>
+    <!-- Date Ends -->
+
+    <!-- Test out deploy and retrieve verbs for package 'mypkg' -->
+    <target name="test">
+      <!-- Upload the contents of the "mypkg" package -->
+      <sf:deploy username="${sf.username}" password="${sf.password}" sessionId="${sf.sessionId}" serverurl="${sf.serverurl}" maxPoll="${sf.maxPoll}" deployRoot="mypkg" rollbackOnError="true"/>
+      <mkdir dir="retrieveOutput"/>
+      <!-- Retrieve the contents into another directory -->
+      <sf:retrieve username="${sf.username}" password="${sf.password}" sessionId="${sf.sessionId}" serverurl="${sf.serverurl}" maxPoll="${sf.maxPoll}" retrieveTarget="retrieveOutput" packageNames="MyPkg"/>
+    </target>
+
+    <!-- Retrieve -->
+    <target name="SFDXretrieveUnpackaged">
+      <mkdir dir="retrieveUnpackaged/SFDX"/>
+      <!-- Retrieve the contents into another directory -->
+      <sf:retrieve username="${sf.SFDXUsername}" password="${sf.SFDXPassword}" serverurl="${sf.SFDXServerurl}" maxPoll="${sf.maxPoll}" retrieveTarget="retrieveUnpackaged/SFDX" unpackaged="unpackaged/SFDX/package.xml"/>
+    </target>
+
+    <!-- Retrieve Ends -->
+
+     <!-- Deploy Code Check Only --> <!-- Remember to change deployRoot --> 
+    <target name="SFDXdeployCodeCheckOnly">
+      <sf:deploy username="${sf.PDUsername}" password="${sf.PDPassword}" serverurl="${sf.PDServerurl}" maxPoll="${sf.maxPoll}" deployRoot="manifest" checkOnly="true" testLevel="RunSpecifiedTests">
+        <runTest>listBirthdayCtrlTest</runTest>
+      </sf:deploy>
+    </target>
+    <!-- Deploy Code Check Only Ends -->
+
+     <!-- Deploy Unpackaged --> <!-- Remember to change deployRoot -->
+    <target name="SFDXdeployUnpackaged">
+      <sf:deploy username="${sf.PDUsername}" password="${sf.PDPassword}" serverurl="${sf.PDServerurl}" maxPoll="${sf.maxPoll}" deployRoot="manifest" rollbackOnError="true" testLevel="RunSpecifiedTests">
+        <runTest>listBirthdayCtrlTest</runTest>
+      </sf:deploy>
+    </target>
+    <!-- Deploy Unpackaged Ends-->
+
+    <!-- **************************************************************************************************************************************************************** -->
+  
+</project>
