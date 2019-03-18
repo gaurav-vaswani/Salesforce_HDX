@@ -1,4 +1,5 @@
-.project
-.settings
-salesforce.schema
-Referenced Packages
+.sfdx
+.vscode
+config
+force-app
+.forceignore
