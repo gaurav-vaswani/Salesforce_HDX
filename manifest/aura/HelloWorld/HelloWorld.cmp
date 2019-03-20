@@ -1,0 +1,4 @@
+<aura:component implements="force:appHostable">
+    <h1>Hello World Component</h1>
+    <p>Testing Hybrid Developer Experience</p>
+</aura:component>
