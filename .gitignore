@@ -3,3 +3,5 @@
 config
 force-app
 .forceignore
+build.properties
+build.xml
