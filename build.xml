@@ -44,7 +44,7 @@
      <!-- Deploy Code Check Only --> <!-- Remember to change deployRoot --> 
     <target name="SFDXdeployCodeCheckOnly">
       <sf:deploy username="${sf.PDUsername}" password="${sf.PDPassword}" serverurl="${sf.PDServerurl}" maxPoll="${sf.maxPoll}" deployRoot="manifest" checkOnly="true" testLevel="RunSpecifiedTests">
-        <runTest>listBirthdayCtrlTest</runTest>
+      <runTest>retrieveAccountClassTest</runTest>
       </sf:deploy>
     </target>
     <!-- Deploy Code Check Only Ends -->
